@@ -30,14 +30,14 @@
 "Error_20003","Svea error %s : Tilaus vanhentunut"
 "Error_20004","Svea error %s : Tilausta ei löydy"
 "Error_20005","Svea error %s : Tilaustyyppi virheellinen"
-"Error_20006","Svea error %s : Summan av orderraderna kan ej vara negativ eller noll"
-"Error_20013","Svea error %s : Ordern väntar"
+"Error_20006","Svea error %s : Kaikkien tilausten rivit eivät voi olla summaltaan nolla tai negatiivisia"
+"Error_20013","Svea error %s : Avoinna oleva tilaus"
 
-"Error_27000","Svea error %s : Delbetalningssumman matchar ej någon kampanj som är knuten till kontot"
-"Error_27001","Svea error %s : Det går ej att leverera order för en pdf saknas. Kontakta SveaWebPay’s support"
-"Error_27002","Svea error %s : Det går ej att delleverera en delbetalning"
-"Error_27003","Svea error %s : Det går ej att kombinera Kampanjkod med en fast summa"
-"Error_27004","Svea error %s : Det går ej att hitta en passande kampanjkod för den angivna summan"
+"Error_27000","Svea error %s : Kampanjakoodi-summa yhdistelmä ei vastaa yhtäkään tämän asiakkaan"
+"Error_27001","Svea error %s : Tilausta ei voi toimittaa, koska määritelty pdf lomake puuttuu. Ottakaa yhteyttä Svean tukeen"
+"Error_27002","Svea error %s : Osamaksusuunnitelmalle ei voi suorittaa osatoimitusta"
+"Error_27003","Svea error %s : Kampanjakoodia ei voi yhdistää kiinteään kuukausierään."
+"Error_27004","Svea error %s : Sopivaa kampanjakoodia ei löydy kuukausierälle"
 
 "Error_24000","Svea error %s : Laskun summa ylittää valtuutetun summan"
 
