@@ -110,9 +110,9 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
 
             // Default to the item price
             $name = $item->getName();
-            $price = $item->getBasePrice();
+            $price = $item->getPrice();
 
-            $priceInclTax = $item->getBasePriceInclTax();
+            $priceInclTax = $item->getPriceInclTax();
             $taxPercent = $item->getTaxPercent();
             if (!(int)$taxPercent) {
                 $taxPercent = false;
@@ -122,7 +122,7 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
             if ($parentItem) {
                 switch ($parentItem->getProductType()) {
                     case Mage_Catalog_Model_Product_Type::TYPE_CONFIGURABLE:
-                        $priceInclTax = $parentItem->getBasePriceInclTax();
+                        $priceInclTax = $parentItem->getPriceInclTax();
                         $taxPercent = $parentItem->getTaxPercent();
                         break;
                     case Mage_Catalog_Model_Product_Type::TYPE_BUNDLE:
@@ -166,7 +166,7 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
             $store);
 
         // Shipping
-        if ($order->getBaseShippingAmount() > 0) {
+        if ($order->getShippingAmount() > 0) {
             $shippingFee = WebPayItem::shippingFee()
                 ->setUnit(Mage::helper('svea_webpay')->__('unit'))
                 ->setName($order->getShippingDescription());
@@ -175,12 +175,12 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
             $shippingTaxClass = Mage::getStoreConfig(Mage_Tax_Model_Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS, $storeId);
             $rate = $taxCalculationModel->getRate($request->setProductClassId($shippingTaxClass));
             $shippingFee->setVatPercent((int)$rate);
-            $shippingFee->setAmountIncVat($order->getBaseShippingInclTax());
+            $shippingFee->setAmountIncVat($order->getShippingInclTax());
             $svea->addFee($shippingFee);
         }
 
         // Discount
-        $discount = abs($order->getBaseDiscountAmount());
+        $discount = abs($order->getDiscountAmount());
         if ($discount > 0) {
             $discountRow = WebPayItem::fixedDiscount()
                 ->setName(Mage::helper('svea_webpay')->__('discount'))
@@ -191,7 +191,7 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
         }
 
         // Gift cards
-        if (abs($order->getBaseGiftCardsAmount()) > 0) {
+        if (abs($order->getGiftCardsAmount()) > 0) {
             $giftCardRow = WebPayItem::fixedDiscount()
                 ->setUnit(Mage::helper('svea_webpay')->__('unit'))
                 ->setAmountIncVat(abs($order->getGiftCardsAmount()));
@@ -200,7 +200,7 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
         }
 
         // Invoice fee
-        $paymentFeeInclTax = $order->getBaseSveaPaymentFeeInclTax();
+        $paymentFeeInclTax = $order->getSveaPaymentFeeInclTax();
         if ($paymentFeeInclTax > 0) {
             $paymentFeeTaxClass = $this->getConfigData('handling_fee_tax_class');
             $rate = $taxCalculationModel->getRate($request->setProductClassId($paymentFeeTaxClass));
@@ -216,7 +216,7 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
         $svea->setCountryCode($billingAddress->getCountryId())
             ->setClientOrderNumber($order->getIncrementId())
             ->setOrderDate(date("Y-m-d"))
-            ->setCurrency($order->getBaseCurrencyCode());
+            ->setCurrency($order->getOrderCurrencyCode());
 
         return $svea;
     }

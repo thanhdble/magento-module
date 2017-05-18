@@ -11,6 +11,6 @@ class Svea_WebPay_Model_Sales_Order_Pdf_Total_Paymentfee
     public function getAmount()
     {
         $source = $this->getSource();
-        return $source->getBaseSveaPaymentFeeInclTax() ?: null;
+        return $source->getSveaPaymentFeeInclTax() ?: null;
     }
 }
