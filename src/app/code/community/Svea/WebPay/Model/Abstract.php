@@ -182,10 +182,29 @@ abstract class Svea_WebPay_Model_Abstract extends Mage_Payment_Model_Method_Abst
         // Discount
         $discount = abs($order->getDiscountAmount());
         if ($discount > 0) {
-            $discountRow = WebPayItem::fixedDiscount()
-                ->setName(Mage::helper('svea_webpay')->__('discount'))
-                ->setUnit(Mage::helper('svea_webpay')->__('unit'))
-                ->setAmountIncVat($discount);
+            $applyTaxAfterDiscount = (int)Mage::getStoreConfig('tax/calculation/apply_after_discount');
+            $discountIncludesTax   = (int)Mage::getStoreConfig('tax/calculation/discount_tax');
+            if (!$discountIncludesTax && !$applyTaxAfterDiscount) {
+                $discountRow = WebPayItem::fixedDiscount()
+                    ->setName(Mage::helper('svea_webpay')->__('discount'))
+                    ->setUnit(Mage::helper('svea_webpay')->__('unit'))
+                    ->setAmountExVat($discount)
+                    ->setVatPercent((int)0);
+            } elseif (
+                (!$discountIncludesTax && $applyTaxAfterDiscount)
+                || ($discountIncludesTax && $applyTaxAfterDiscount)
+            ) {
+                $discountRow = WebPayItem::fixedDiscount()
+                    ->setName(Mage::helper('svea_webpay')->__('discount'))
+                    ->setUnit(Mage::helper('svea_webpay')->__('unit'))
+                    ->setAmountExVat($discount)
+                    ->setVatPercent((int)$taxPercent);
+            } else {
+                $discountRow = WebPayItem::fixedDiscount()
+                    ->setName(Mage::helper('svea_webpay')->__('discount'))
+                    ->setUnit(Mage::helper('svea_webpay')->__('unit'))
+                    ->setAmountIncVat($discount);
+            }
 
             $svea->addDiscount($discountRow);
         }
