@@ -139,7 +139,17 @@ class Svea_WebPay_HostedController extends Mage_Core_Controller_Front_Action
             $session = Mage::getSingleton('checkout/session');
             $session->setLastQuoteId($session->getSveaLastQuoteId());
             $session->unsSveaLastQuoteId();
-            $this->callbackAction();
+
+            $response = $this->_getSveaResponseObject();
+            $accepted = $response->response->accepted;
+            if ($accepted === 0) {
+                // Transaction not accepted
+                throw new Exception(
+                    'Payment failed with code: ' .
+                    $response->response->resultcode .
+                    '. Please contact Svea for more information.'
+                );
+            }
 
             $quote = Mage::getModel('sales/quote')->load($session->getLastQuoteId());
             if ($quote->getId()) {
