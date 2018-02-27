@@ -72,7 +72,7 @@ abstract class Svea_WebPay_Model_Hosted_Abstract extends Svea_WebPay_Model_Abstr
                 // Negative, use a discount row
                 $row = WebPayItem::fixedDiscount()
                     ->setUnit(Mage::helper('svea_webpay')->__('unit'))
-                    ->setAmountIncVat(abs($diff));
+                    ->setAmountIncVat((float)abs($diff));
                 $svea->addDiscount($row);
             } else {
                 // Positive, use a normal order row
@@ -83,7 +83,7 @@ abstract class Svea_WebPay_Model_Hosted_Abstract extends Svea_WebPay_Model_Abstr
                     ->setName('Magento Equalisation')
                     ->setUnit(Mage::helper('svea_webpay')->__('unit'))
                     ->setVatPercent($rate)
-                    ->setAmountIncVat($diff);
+                    ->setAmountIncVat((float)$diff);
                 $svea->addOrderRow($row);
             }
         }
