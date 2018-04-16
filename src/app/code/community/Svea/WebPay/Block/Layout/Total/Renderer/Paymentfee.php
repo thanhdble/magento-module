@@ -16,6 +16,11 @@ class Svea_WebPay_Block_Layout_Total_Renderer_Paymentfee
     {
         $order = $this->getParentBlock()
                 ->getOrder();
+
+        $includesTax = Mage::app()
+            ->getStore($order->getStoreId())
+            ->getConfig('payment/svea_invoice/handling_fee_includes_tax');
+        
         $payment = $order->getPayment();
 
         if (!preg_match('/svea_invoice/', $payment->getMethod())) {
@@ -37,8 +42,12 @@ class Svea_WebPay_Block_Layout_Total_Renderer_Paymentfee
             $source = $order;
         }
 
-        $paymentFee = (float)$source->getSveaPaymentFeeInclTax();
-        $basePaymentFee = (float)$source->getBaseSveaPaymentFeeInclTax();
+        $paymentFee     = $includesTax
+                        ? (float)$source->getSveaPaymentFeeInclTax()
+                        : (float)$source->getSveaPaymentFeeAmount();
+        $basePaymentFee = $includesTax
+                        ? (float)$source->getBaseSveaPaymentFeeInclTax()
+                        : (float)$source->getBaseSveaPaymentFeeAmount();
 
         if (empty($paymentFee)) {
             return;
@@ -59,3 +68,4 @@ class Svea_WebPay_Block_Layout_Total_Renderer_Paymentfee
         return $this;
     }
 }
+
