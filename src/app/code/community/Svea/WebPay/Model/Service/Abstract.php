@@ -358,7 +358,11 @@ abstract class Svea_WebPay_Model_Service_Abstract extends Svea_WebPay_Model_Abst
             // The response for individual only has fullName set -
             // explode on comma and set firstName/lastName
             if ($identity->customerType === 'Individual') {
-                list($lastName, $firstName) = explode(',', $identity->fullName);
+                if(count(list($lastName, $firstName) = explode(',', $identity->fullName, 2)) <= 1)
+                {
+                    list($lastName, $firstName) = explode(' ', $identity->fullName, 2);
+                }
+
                 foreach ($addresses as $address) {
                     $address->setFirstname($firstName);
                     $address->setLastname($lastName);
