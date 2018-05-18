@@ -1,7 +1,6 @@
 # Magento - Svea WebPay payment module
-## Version 4.0
 
-Supports Magento 1.4.2.0 up to 1.9.2.2.
+Supports Magento 1.4.2.0 up to 1.9.3.8
 
 Supported countries are
 **Sweden**, **Norway**, **Finland**, **Denmark**, **The Netherlands**, **Germany**.
